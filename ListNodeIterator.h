@@ -1,5 +1,6 @@
 #pragma once
 #include "Node.h"
+#include <cstddef> // Для std::nullptr_t
 
 template<typename T>
 class ListNodeIterator {
@@ -38,7 +39,7 @@ public:
         return ptr != other.ptr;
     }
 
-    bool operator==(const ListNodeIterator<T>& other) const {
-        return ptr == other.ptr;
+    bool operator!=(std::nullptr_t) const {
+        return ptr != nullptr;
     }
 };

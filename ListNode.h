@@ -46,7 +46,7 @@ public:
     }
 
     void pop_back() {
-        if(head == nullptr) return;
+        if(head == nullptr) throw std::runtime_error("ListNode is empty;");
 
         Node<T>* toDelete = tail;
         if(head == tail) {
@@ -60,7 +60,7 @@ public:
     }
 
     void pop_front() {
-        if(head == nullptr) return;
+        if(head == nullptr) throw std::runtime_error("ListNode is empty;");
 
         Node<T>* toDelete = head;
         if(head == tail) {
@@ -74,37 +74,44 @@ public:
     }
 
     const T& back() const {
-        if(tail == nullptr) throw std::runtime_error("ListNode is empty;\n");
+        if(tail == nullptr) throw std::runtime_error("ListNode is empty;");
         return tail->data;
     }
 
     T& back() {
-        if(tail == nullptr) throw std::runtime_error("ListNode is empty;\n");
+        if(tail == nullptr) throw std::runtime_error("ListNode is empty;");
         return tail->data;
     }
 
     const T& front() const {
-        if(head == nullptr) throw std::runtime_error("ListNode is empty;\n");
+        if(head == nullptr) throw std::runtime_error("ListNode is empty;");
         return head->data;
     }
 
     T& front() {
-        if(head == nullptr) throw std::runtime_error("ListNode is empty;\n");
+        if(head == nullptr) throw std::runtime_error("ListNode is empty;");
         return head->data;
     }
 
     ListNodeIterator<T> begin() { return ListNodeIterator<T>(head); }
 
-    ListNodeIterator<T> end() { return ListNodeIterator<T>(nullptr); }
+    ListNodeIterator<T> end() { return ListNodeIterator<T>(tail); }
 
     ConstListNodeIterator<T> begin() const { return ConstListNodeIterator<T>(head); }
 
-    ConstListNodeIterator<T> end() const { return ConstListNodeIterator<T>(nullptr); }
+    ConstListNodeIterator<T> end() const { return ConstListNodeIterator<T>(tail); }
 
     friend std::ostream& operator<< (std::ostream& os, const ListNode<T>& list) {
-        for (auto it = list.begin(); it != list.end(); ++it) {
-            os << *it << " ";
+        os << "[";
+
+        auto it = list.begin();
+        for (it; it != list.end(); ++it) {
+            os << *it << ", ";
         }
+        if (it != nullptr)
+            os << *it;
+
+        os << "]";
         return os;
     }
 };
