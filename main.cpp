@@ -45,9 +45,31 @@ void first_test(){
     std::cout << list << std::endl;
 }
 
-int main() {
-    first_test();
-
+void second_test(){
+    ListNode<double> list;
     
+    list.push_back(2.2);
+    list.push_back(1.1);
+    list.push_back(2.2);
+    list.push_back(3.3);
+    list.push_back(2.2);
+    list.push_back(4.4);
+
+    std::cout << list << std::endl;
+
+    list.remove(2.2);
+
+    std::cout << list << std::endl;
+
+    list.clear();
+
+    std::cout << list << std::endl;
+}
+
+int main() {
+    // first_test();
+    second_test();
+
+
     return 0;
 }

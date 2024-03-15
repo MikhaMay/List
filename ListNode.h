@@ -114,4 +114,33 @@ public:
         os << "]";
         return os;
     }
+
+    void clear() {
+        while (head != nullptr) {
+            Node<T>* toDelete = head;
+            head = head->next;
+            delete toDelete;
+        }
+        tail = nullptr;
+    }
+
+    void remove(const T& val) {
+        Node<T>* current = head;
+        while (current != nullptr) {
+            if (current->data == val) {
+                Node<T>* toDelete = current;
+                if (current->next != nullptr) current->next->prev = current->prev;
+                if (current->prev != nullptr) current->prev->next = current->next;
+
+                if (current == head) head = current->next;
+                if (current == tail) tail = current->prev;
+
+                current = current->next;
+                delete toDelete;
+            } else {
+                current = current->next;
+            }
+        }
+    }
+
 };
