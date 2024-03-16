@@ -95,23 +95,26 @@ public:
 
     ListNodeIterator<T> begin() { return ListNodeIterator<T>(head); }
 
-    ListNodeIterator<T> end() { return ListNodeIterator<T>(tail); }
-
     ConstListNodeIterator<T> begin() const { return ConstListNodeIterator<T>(head); }
 
-    ConstListNodeIterator<T> end() const { return ConstListNodeIterator<T>(tail); }
+    ListNodeIterator<T> end() const { return ListNodeIterator<T>(nullptr); }
+
+    ListNodeIterator<T> rbegin() { return ListNodeIterator<T>(tail); }
+
+    ConstListNodeIterator<T> rbegin() const { return ConstListNodeIterator<T>(tail); }
+
+    ListNodeIterator<T> rend() const { return ListNodeIterator<T>(nullptr); }
 
     friend std::ostream& operator<< (std::ostream& os, const ListNode<T>& list) {
-        os << "[";
-
-        auto it = list.begin();
-        for (it; it != list.end(); ++it) {
-            os << *it << ", ";
+        if (list.head == nullptr) 
+            os << "[]";
+        else {
+            os << "[";
+            for (auto cur = list.head; cur != list.tail; cur = cur->next) {
+                os << cur->data << ", ";
+            }
+            os << list.tail->data << "]";
         }
-        if (it != nullptr)
-            os << *it;
-
-        os << "]";
         return os;
     }
 
@@ -141,6 +144,68 @@ public:
                 current = current->next;
             }
         }
+    }
+
+    size_t size() {
+        size_t res = 0;
+        Node<T> * current = head;
+        while (current != nullptr) 
+            ++res, current = current->next;
+        return res;
+    }
+
+    bool empty() {
+        return head == nullptr;
+    }
+
+    void insert(ListNodeIterator<T> position, const T& value) {
+        Node<T>* newNode = new Node<T>(value);
+        Node<T>* current = position.ptr;    // Узел, на который указывает position
+
+        if (current == nullptr) {           // Если вставляем в конец списка, или он пустой
+            if (head == nullptr) {
+                head = newNode;
+                tail = newNode;
+            }
+            else {
+                tail->next = newNode;
+                tail = newNode;
+            }
+        }
+        else if (current == head) {         // Если вставляем в начало списка, и он не пустой
+            newNode->next = head;
+            head->prev = newNode;
+            head = newNode;
+        }
+        else {                              // Вставляем в середину списка
+            newNode->next = current;
+            newNode->prev = current->prev;
+            current->prev->next = newNode;
+            current->prev = newNode;
+        }
+    }
+
+    void erase(ListNodeIterator<T> position) {
+        Node<T>* toDelete = position.ptr;
+        
+        if (head == tail) {                 // Голова совпадает с хвостом
+            head = nullptr;
+            tail = nullptr;
+        }
+        else if (toDelete == head) {        // Удаление головы (элементов больше 1 по п. 1)
+            head = head->next;
+            head->prev = nullptr;
+        }
+        else if (toDelete == tail) {        // Удаление хвоста (элементов больше 1 по п. 1)
+            tail = tail->prev;
+            tail->next = nullptr;
+        }
+        else {                              // Удаление середины (элементов больше 1 по п. 1)
+            toDelete->prev->next = toDelete->next;
+            toDelete->next->prev = toDelete->prev;
+        }
+
+        delete toDelete;
     }
 
 };

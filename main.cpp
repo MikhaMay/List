@@ -10,7 +10,7 @@
 // > size(): Возвращает количество элементов в списке.
 // > empty(): Проверяет, пуст ли список.
 
-void first_test(){
+void first_test(){ 
     ListNode<int> list;
     list.push_back(1);
     list.push_back(2);
@@ -26,7 +26,7 @@ void first_test(){
 
     auto it = list.begin();
 
-    while (it != nullptr) 
+    while (it != list.end()) 
         *(it++) += 1;
 
     std::cout << list << std::endl; // Вывод: 1 3 4
@@ -54,22 +54,68 @@ void second_test(){
     list.push_back(3.3);
     list.push_back(2.2);
     list.push_back(4.4);
+    
+    std::cout << list.size() << " " << list.empty() << std::endl;
 
     std::cout << list << std::endl;
 
-    list.remove(2.2);
+    list.remove(2.2);   // удаление всех 2.2
+
+    std::cout << list.size() << " " << list.empty() << std::endl;
 
     std::cout << list << std::endl;
 
-    list.clear();
+    list.clear();       // очистка
+
+    std::cout << list.size() << " " << list.empty() << std::endl;
 
     std::cout << list << std::endl;
 }
 
+void third_test() {
+    ListNode<int> list;
+    for (int i = 1; i < 6; ++i) list.push_back(i);
+
+    std::cout << list << std::endl; // Вывод: 1 2 3 4 5
+
+    auto it = list.begin();
+    ++(++it);
+
+    list.insert(it, -1);
+
+    std::cout << list << std::endl; // Вывод: 1 2 -1 3 4 5
+
+    list.insert(list.end(), -2);
+    list.insert(list.begin(), -3);
+
+    std::cout << list << std::endl; // Вывод: -3 1 2 -1 3 4 5 -2
+
+    list.clear();
+    list.insert(list.end(), 10);
+
+    std::cout << list << std::endl; // Вывод: 10
+
+    it = list.begin();
+    for (int i = 1; i < 6; ++i) list.insert(it, i);
+
+    std::cout << list << std::endl; // Вывод: 1 2 3 4 5 6 10
+
+    it = list.rbegin();
+    while ( !list.empty() ) {
+        list.erase(it--);
+        std::cout << list << std::endl;}
+}
+
+void fourth_test() {
+    
+}
+
 int main() {
     // first_test();
-    second_test();
 
+    //second_test();
+
+    third_test();
 
     return 0;
 }
