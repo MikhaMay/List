@@ -13,6 +13,20 @@ private:
 public:
     ListNode() : head(nullptr), tail(nullptr) {}
 
+    ListNode(const ListNode<T> & ln) {
+        head = nullptr;
+        tail = nullptr;
+        for (auto it = ln.begin(); it != ln.end(); ++it) 
+            push_back(*it);
+    }
+
+    const ListNode<T> & operator= (const ListNode<T> & ln) {
+        clear();
+        for (auto it = ln.begin(); it != ln.end(); ++it) 
+            push_back(*it);
+        return ln;
+    }
+
     ~ListNode() {
         while (head != nullptr) {
             Node<T>* next = head->next;
@@ -146,7 +160,7 @@ public:
         }
     }
 
-    size_t size() {
+    size_t size() const {
         size_t res = 0;
         Node<T> * current = head;
         while (current != nullptr) 
@@ -154,7 +168,7 @@ public:
         return res;
     }
 
-    bool empty() {
+    bool empty() const {
         return head == nullptr;
     }
 
@@ -206,6 +220,17 @@ public:
         }
 
         delete toDelete;
+    }
+
+    bool operator==(const ListNode<T> & l) const {
+        if (size() != l.size()) 
+            return false;
+
+        for (auto it1 = begin(), it2 = l.begin(); it1 != end(); ++it1, ++it2) 
+            if (*it1 != *it2)
+                return false;
+
+        return true;
     }
 
 };

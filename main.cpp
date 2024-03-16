@@ -107,7 +107,22 @@ void third_test() {
 }
 
 void fourth_test() {
+    ListNode<int> list;
+    for (int i = 1; i < 6; ++i) list.push_back(i);
+
+    const ListNode<int> list2(list);
     
+    std::cout << (list2 == list) << std::endl;
+
+    list.back() = 10;
+
+    std::cout << (list2 == list) << std::endl;
+
+    list = list2;
+
+    std::cout << (list2 == list) << std::endl;
+
+    std::cout << list2;
 }
 
 int main() {
@@ -115,7 +130,9 @@ int main() {
 
     //second_test();
 
-    third_test();
+    // third_test();
+
+    fourth_test();
 
     return 0;
 }
