@@ -20,11 +20,13 @@ public:
             push_back(*it);
     }
 
-    const ListNode<T> & operator= (const ListNode<T> & ln) {
-        clear();
-        for (auto it = ln.begin(); it != ln.end(); ++it) 
-            push_back(*it);
-        return ln;
+    ListNode<T>& operator= (const ListNode<T> & ln) {
+        if (this != &ln) {
+            clear();
+            for (auto it = ln.begin(); it != ln.end(); ++it) 
+                push_back(*it);
+        }
+        return *this;
     }
 
     ~ListNode() {
@@ -111,13 +113,17 @@ public:
 
     ConstListNodeIterator<T> begin() const { return ConstListNodeIterator<T>(head); }
 
-    ListNodeIterator<T> end() const { return ListNodeIterator<T>(nullptr); }
+    ListNodeIterator<T> end() { return ListNodeIterator<T>(nullptr); }
+
+    ConstListNodeIterator<T> end() const { return ConstListNodeIterator<T>(nullptr); }
 
     ListNodeIterator<T> rbegin() { return ListNodeIterator<T>(tail); }
 
     ConstListNodeIterator<T> rbegin() const { return ConstListNodeIterator<T>(tail); }
 
-    ListNodeIterator<T> rend() const { return ListNodeIterator<T>(nullptr); }
+    ListNodeIterator<T> rend() { return ListNodeIterator<T>(nullptr); }
+
+    ConstListNodeIterator<T> rend() const { return ConstListNodeIterator<T>(nullptr); }
 
     friend std::ostream& operator<< (std::ostream& os, const ListNode<T>& list) {
         if (list.head == nullptr) 
@@ -206,15 +212,15 @@ public:
             head = nullptr;
             tail = nullptr;
         }
-        else if (toDelete == head) {        // Удаление головы (элементов больше 1 по п. 1)
+        else if (toDelete == head) {        // Удаление головы (элементов больше одного по п. 1)
             head = head->next;
             head->prev = nullptr;
         }
-        else if (toDelete == tail) {        // Удаление хвоста (элементов больше 1 по п. 1)
+        else if (toDelete == tail) {        // Удаление хвоста (элементов больше одного по п. 1)
             tail = tail->prev;
             tail->next = nullptr;
         }
-        else {                              // Удаление середины (элементов больше 1 по п. 1)
+        else {                              // Удаление середины (элементов больше одного по п. 1)
             toDelete->prev->next = toDelete->next;
             toDelete->next->prev = toDelete->prev;
         }

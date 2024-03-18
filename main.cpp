@@ -111,26 +111,26 @@ void fourth_test() {
     for (int i = 1; i < 6; ++i) list.push_back(i);
 
     const ListNode<int> list2(list);
-    
-    std::cout << (list2 == list) << std::endl;
+
+    std::cout << (list2 == list) << std::endl;  //true
 
     list.back() = 10;
 
-    std::cout << (list2 == list) << std::endl;
+    std::cout << (list2 == list) << std::endl;  //false
 
     list = list2;
 
-    std::cout << (list2 == list) << std::endl;
+    std::cout << (list2 == list) << std::endl;  //true
 
     std::cout << list2;
 }
 
 int main() {
-    // first_test();
+    first_test();
 
-    //second_test();
+    second_test();
 
-    // third_test();
+    third_test();
 
     fourth_test();
 
