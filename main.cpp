@@ -48,12 +48,7 @@ void first_test(){
 void second_test(){
     ListNode<double> list;
     
-    list.push_back(2.2);
-    list.push_back(1.1);
-    list.push_back(2.2);
-    list.push_back(3.3);
-    list.push_back(2.2);
-    list.push_back(4.4);
+    list = {2.2, 1.1, 2.2, 3.3, 2.2, 4.4};
     
     std::cout << list.size() << " " << list.empty() << std::endl;
 

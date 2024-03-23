@@ -4,6 +4,7 @@
 #include "ConstListNodeIterator.h"
 #include <iostream>
 #include <stdexcept>
+#include <initializer_list>
 
 template <typename T>
 class ListNode {
@@ -25,6 +26,27 @@ public:
             clear();
             for (auto it = ln.begin(); it != ln.end(); ++it) 
                 push_back(*it);
+        }
+        return *this;
+    }
+
+    ListNode(ListNode<T> && ln) noexcept : head(ln.head), tail(ln.tail) {
+        ln.head = nullptr;
+        ln.tail = nullptr;
+    }
+
+    ListNode(std::initializer_list<T> ilist) : head(nullptr), tail(nullptr) {
+        for (auto &item : ilist)
+            push_back(item);
+    }
+    
+    ListNode<T>& operator=(ListNode<T> && ln) noexcept {
+        if (this != &ln) {
+            clear();
+            head = ln.head;
+            tail = ln.tail;
+            ln.head = nullptr;
+            ln.tail = nullptr;
         }
         return *this;
     }
