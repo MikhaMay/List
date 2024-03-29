@@ -9,14 +9,13 @@
 template <typename T>
 class ListNode {
 private:
-    Node<T>* head;
-    Node<T>* tail;
+    Node<T>* head = nullptr;
+    Node<T>* tail = nullptr;
+    size_t size_ = 0;
 public:
-    ListNode() : head(nullptr), tail(nullptr) {}
+    ListNode() {}
 
     ListNode(const ListNode<T> & ln) {
-        head = nullptr;
-        tail = nullptr;
         for (auto it = ln.begin(); it != ln.end(); ++it) 
             push_back(*it);
     }
@@ -30,33 +29,31 @@ public:
         return *this;
     }
 
-    ListNode(ListNode<T> && ln) noexcept : head(ln.head), tail(ln.tail) {
+    ListNode(ListNode<T> && ln) noexcept : head(ln.head), tail(ln.tail), size_(ln.size_) {
         ln.head = nullptr;
         ln.tail = nullptr;
+        ln.size_ = 0;
     }
 
-    ListNode(std::initializer_list<T> ilist) : head(nullptr), tail(nullptr) {
+    ListNode(std::initializer_list<T> ilist) {
         for (auto &item : ilist)
             push_back(item);
     }
     
-    ListNode<T>& operator=(ListNode<T> && ln) noexcept {
+    ListNode<T>&& operator=(ListNode<T> && ln) noexcept {
         if (this != &ln) {
             clear();
+            size_ = ln.size_;
             head = ln.head;
             tail = ln.tail;
             ln.head = nullptr;
             ln.tail = nullptr;
         }
-        return *this;
+        return std::move(*this);
     }
 
     ~ListNode() {
-        while (head != nullptr) {
-            Node<T>* next = head->next;
-            delete head;
-            head = next;
-        }
+        clear();
     }
 
     void push_back(const T& d) {
@@ -69,6 +66,7 @@ public:
             tmp_node->prev = tail;
             tail = tmp_node;
         }
+        ++size_;
     }
 
     void push_front(const T& d) {
@@ -81,11 +79,11 @@ public:
             head->prev = tmp_node;
             head = tmp_node;
         }
+        ++size_;
     }
 
     void pop_back() {
         if(head == nullptr) throw std::runtime_error("ListNode is empty;");
-
         Node<T>* toDelete = tail;
         if(head == tail) {
             head = nullptr;
@@ -95,11 +93,11 @@ public:
             tail->next = nullptr;
         }
         delete toDelete;
+        --size_;
     }
 
     void pop_front() {
         if(head == nullptr) throw std::runtime_error("ListNode is empty;");
-
         Node<T>* toDelete = head;
         if(head == tail) {
             head = nullptr;
@@ -109,6 +107,7 @@ public:
             head->prev = nullptr;
         }
         delete toDelete;
+        --size_;
     }
 
     const T& back() const {
@@ -165,6 +164,7 @@ public:
             Node<T>* toDelete = head;
             head = head->next;
             delete toDelete;
+            size_ -= 1;
         }
         tail = nullptr;
     }
@@ -182,6 +182,7 @@ public:
 
                 current = current->next;
                 delete toDelete;
+                --size_;
             } else {
                 current = current->next;
             }
@@ -189,18 +190,15 @@ public:
     }
 
     size_t size() const {
-        size_t res = 0;
-        Node<T> * current = head;
-        while (current != nullptr) 
-            ++res, current = current->next;
-        return res;
+        return size_;
     }
 
     bool empty() const {
-        return head == nullptr;
+        return size_ == 0;
     }
 
     void insert(ListNodeIterator<T> position, const T& value) {
+        ++size_;
         Node<T>* newNode = new Node<T>(value);
         Node<T>* current = position.ptr;    // Узел, на который указывает position
 
@@ -248,10 +246,11 @@ public:
         }
 
         delete toDelete;
+        --size_;
     }
 
     bool operator==(const ListNode<T> & l) const {
-        if (size() != l.size()) 
+        if (size_ != l.size_) 
             return false;
 
         for (auto it1 = begin(), it2 = l.begin(); it1 != end(); ++it1, ++it2) 
